@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '/companyLogo.png'; // Adjust the path as necessary
 
@@ -21,8 +20,12 @@ function Checkout() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const generateUniqueId = () => {
+    return 'id-' + Math.random().toString(36).substr(2, 9);
+  };
+
   const handleConfirmOrder = () => {
-    const uniqueId = uuidv4();
+    const uniqueId = generateUniqueId();
     setOrderId(uniqueId);
     setShowModal(true);
     console.log('Added Items:', addedItems); // Debugging to ensure addedItems is populated
