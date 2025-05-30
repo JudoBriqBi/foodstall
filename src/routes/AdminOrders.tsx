@@ -76,7 +76,7 @@ const AdminOrders = () => {
           {orders.map((order) => (
             <tr key={order.id}>
               <td className="border border-gray-300 p-2">{order.order_id}</td>
-              <td className="border border-gray-300 p-2">{order.user_name}</td>
+              <td className="border border-gray-300 p-2">{order.user_name} </td>
               <td className="border border-gray-300 p-2">
                 {order.ordered_items && order.ordered_items.length > 0 ? (
                   order.ordered_items.map((item, index) => (
