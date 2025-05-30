@@ -3,26 +3,26 @@ name: Deploy to Firebase Hosting
 on:
   push:
     branches:
-      - main
+      - main # Deploys when changes are pushed to the 'main' branch
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install dependencies
+      run: npm install
 
-      - name: Build project
-        env:
-          VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
-        run: npm run build
+    - name: Build project
+      run: npm run build # Adjust this command if your build process is different
 
-      - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+    - name: Deploy to Firebase Hosting
+      uses: w9jds/firebase-action@v2.2.1
+      with:
+        args: deploy
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
