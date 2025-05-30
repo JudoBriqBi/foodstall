@@ -20,6 +20,7 @@ function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
   const [orderId, setOrderId] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  // Reset form when modal opens or addedItems change
   useEffect(() => {
     if (isOpen) {
       setFormData({
@@ -29,14 +30,17 @@ function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
         tableNo: '',
         orderType: '',
       });
-      setOrderId('');
-      setShowSuccessModal(false);
+      setShowSuccessModal(false); // Reset success modal as well
     }
   }, [isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const generateUniqueId = () => {
+    return 'id-' + Math.random().toString(36).substr(2, 9);
   };
 
   const handleConfirmOrder = async () => {
@@ -50,27 +54,22 @@ function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
       return;
     }
 
+    const uniqueId = generateUniqueId();
+    setOrderId(uniqueId);
+
     const orderData = {
       userName,
       phoneNo,
       roomNo,
       tableNo,
       orderType,
+      orderId: uniqueId,
       orderedItems: addedItems,
     };
 
     try {
       const response = await axios.post('/api/users/orders', orderData);
       console.log('Order saved successfully:', response.data);
-      
-      if (response.data && response.data.id) {
-        setOrderId(response.data.id.toString());
-      } else if (response.data && response.data.order_id) {
-        setOrderId(response.data.order_id.toString());
-      } else {
-        console.warn('Backend did not return a recognizable order ID. Displaying a generic message or timestamp ID.');
-        setOrderId(`TEMP-${Date.now()}`);
-      }
       setShowSuccessModal(true);
     } catch (error) {
       console.error('Error saving order:', error);
@@ -80,38 +79,7 @@ function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
 
   const closeSuccessModalAndCheckout = () => {
     setShowSuccessModal(false);
-    onClose();
-  };
-
-  const handleDownloadReceipt = () => {
-    const totalPrice = addedItems.reduce((sum, item) => sum + item.quantity * parseInt(item.price.replace('₹', '')), 0);
-    let receiptContent = `Order Receipt\n`;
-    receiptContent += `------------------------------------\n`;
-    receiptContent += `Order ID: ${orderId}\n`;
-    receiptContent += `User Name: ${formData.userName}\n`;
-    receiptContent += `Phone No: ${formData.phoneNo}\n`;
-    receiptContent += `Room No: ${formData.roomNo}\n`;
-    receiptContent += `Table No: ${formData.tableNo}\n`;
-    receiptContent += `Order Type: ${formData.orderType}\n`;
-    receiptContent += `Date: ${new Date().toLocaleString()}\n`;
-    receiptContent += `------------------------------------\n`;
-    receiptContent += `Ordered Items:\n`;
-    addedItems.forEach(item => {
-      receiptContent += `  - ${item.name} (x${item.quantity}): ${item.price} each\n`;
-    });
-    receiptContent += `------------------------------------\n`;
-    receiptContent += `Total Price: ₹${totalPrice}\n`;
-    receiptContent += `------------------------------------\n`;
-    receiptContent += `Thank you for your order!\n`;
-
-    const blob = new Blob([receiptContent], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `Order_Receipt_${orderId}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
+    onClose(); // Close the main checkout modal
   };
   
   if (!isOpen) {
@@ -238,20 +206,12 @@ function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
                   ))}
                 </ul>
               </div>
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={handleDownloadReceipt}
-                  className="flex-1 bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition duration-150 ease-in-out"
-                >
-                  Download Receipt
-                </button>
-                <button
-                  onClick={closeSuccessModalAndCheckout}
-                  className="flex-1 bg-[#4d869c] text-white px-6 py-2 rounded-md hover:bg-[#357086] transition duration-150 ease-in-out"
-                >
-                  Close
-                </button>
-              </div>
+              <button
+                onClick={closeSuccessModalAndCheckout}
+                className="mt-6 bg-[#4d869c] text-white px-6 py-2 rounded-md hover:bg-[#357086] transition duration-150 ease-in-out w-full"
+              >
+                Close
+              </button>
             </div>
           </div>
         )}

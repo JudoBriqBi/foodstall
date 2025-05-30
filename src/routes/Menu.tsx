@@ -4,16 +4,14 @@ import logo from '/companyLogo.png'; // Adjust the path as necessary
 
 function Menu() {
   const menuItems = [
-    { name: 'Lays magic masala', price: '₹50', image: '/lays.jpg', isVeg: true, available: true },
-    { name: 'Lays cream & onion', price: '₹50', image: '/lays_green.jpg', isVeg: true, available: true },
-    { name: 'Bingo Mad Angles', price: '₹50', image: '/mad.jpg', isVeg: true, available: true },
-    { name: 'Bingo Tedhe Medhe', price: '₹20', image: '/tedhe.jpg', isVeg: true, available: true },
-    { name: 'Kurkure Masala Munch', price: '30', image: '/kurkure.webp', isVeg: true, available: true },
-    { name: 'Sunfeast Caker Swiss Roll', price: '10', image: '/swiss.webp', isVeg: true, available: true },
-    { name: 'Sunfeast Caker Trinity', price: '10', image: '/trin.webp', isVeg: true, available: true },
-    { name: 'Waffy(single roll)', price: '05', image: '/waffy.webp', isVeg: true, available: true },
-    { name: 'Coffee', price: '₹12', image: '/coffee.jpg', isVeg: true, available: false },
-    { name: 'Tea', price: '₹12', image: '/chai.jpg', isVeg: true, available: false },
+    { name: 'Lays magic masala', price: '₹50', image: '/lays.jpg', isVeg: true },
+    { name: 'Lays cream & onion', price: '₹50', image: '/lays_green.jpg', isVeg: true },
+    { name: 'Bingo Mad Angles', price: '₹50', image: '/mad.jpg', isVeg: true },
+    { name: 'Too Yumm Bhoot Chips', price: '₹50', image: '/bhoot.jpg', isVeg: true },
+    { name: 'Bingo Tedhe Medhe', price: '₹50', image: '/tedhe.jpg', isVeg: true },
+    { name: 'Coffee', price: '₹12', image: '/coffee.jpg', isVeg: true },
+    { name: 'Tea', price: '₹12', image: '/chai.jpg', isVeg: true },
+    
   ];
 
   const [quantities, setQuantities] = useState(Array(menuItems.length).fill(0));
@@ -106,15 +104,11 @@ function Menu() {
                 <span className="text-lg font-semibold text-gray-900">{item.name}</span>
               </div>
               <span className="text-[#4d869c] font-bold mb-2 text-lg">{item.price}</span>
-              {!item.available && (
-                <span className="text-red-500 text-sm font-medium mb-2">Currently Unavailable</span>
-              )}
               <div className="flex w-full justify-center items-center gap-2 mt-2">
                 <button
-                  className={`bg-gray-200 text-[#4d869c] px-3 py-1 text-2xl rounded-l hover:bg-[#e0f2f7] focus:outline-none focus:ring-2 focus:ring-[#4d869c] min-w-[40px] ${!item.available ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className="bg-gray-200 text-[#4d869c] px-3 py-1 text-2xl rounded-l hover:bg-[#e0f2f7] focus:outline-none focus:ring-2 focus:ring-[#4d869c] min-w-[40px]"
                   aria-label={`Decrease quantity of ${item.name}`}
                   onClick={() => decrementQuantity(index)}
-                  disabled={!item.available}
                 >
                   -
                 </button>
@@ -122,10 +116,9 @@ function Menu() {
                   {quantities[index]}
                 </span>
                 <button
-                  className={`bg-[#4d869c] text-white px-3 py-1 text-2xl rounded-r hover:bg-[#357086] focus:outline-none focus:ring-2 focus:ring-[#4d869c] min-w-[40px] ${!item.available ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className="bg-[#4d869c] text-white px-3 py-1 text-2xl rounded-r hover:bg-[#357086] focus:outline-none focus:ring-2 focus:ring-[#4d869c] min-w-[40px]"
                   aria-label={`Increase quantity of ${item.name}`}
                   onClick={() => incrementQuantity(index)}
-                  disabled={!item.available}
                 >
                   +
                 </button>
