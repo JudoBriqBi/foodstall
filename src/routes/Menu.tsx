@@ -6,7 +6,7 @@ function Menu() {
   const menuItems = [
     { name: 'Lays magic masala', price: '₹50', image: '/lays.jpg', isVeg: true },
     { name: 'Lays cream & onion', price: '₹50', image: '/lays_green.jpg', isVeg: true },
-    { name: 'Bingo Mand angles', price: '₹50', image: '/mad.jpg', isVeg: true },
+    { name: 'Bingo Mad Angles', price: '₹50', image: '/mad.jpg', isVeg: true },
     { name: 'Too Yumm Bhoot Chips', price: '₹50', image: '/bhoot.jpg', isVeg: true },
     { name: 'Bingo Tedhe Medhe', price: '₹50', image: '/tedhe.jpg', isVeg: true },
     { name: 'Coffee', price: '₹12', image: '/coffee.jpg', isVeg: true },
