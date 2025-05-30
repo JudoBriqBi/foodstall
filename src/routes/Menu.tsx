@@ -7,8 +7,11 @@ function Menu() {
     { name: 'Lays magic masala', price: '₹50', image: '/lays.jpg', isVeg: true },
     { name: 'Lays cream & onion', price: '₹50', image: '/lays_green.jpg', isVeg: true },
     { name: 'Bingo Mad Angles', price: '₹50', image: '/mad.jpg', isVeg: true },
-    { name: 'Too Yumm Bhoot Chips', price: '₹50', image: '/bhoot.jpg', isVeg: true },
-    { name: 'Bingo Tedhe Medhe', price: '₹50', image: '/tedhe.jpg', isVeg: true },
+    { name: 'Bingo Tedhe Medhe', price: '₹20', image: '/tedhe.jpg', isVeg: true },
+    { name: 'Kurkure Masala Munch', price: '30', image: '/kurkure.webp', isVeg: true },
+    { name: 'Sunfeast Caker Swiss Roll', price: '10', image: '/swiss.webp', isVeg: true },
+    { name: 'Sunfeast Caker Trinity', price: '10', image: '/trin.webp', isVeg: true },
+    { name: 'Waffy(single roll)', price: '05', image: '/waffy.webp', isVeg: true },
     { name: 'Coffee', price: '₹12', image: '/coffee.jpg', isVeg: true },
     { name: 'Tea', price: '₹12', image: '/chai.jpg', isVeg: true },
     
