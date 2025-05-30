@@ -11,7 +11,7 @@ function Menu() {
     { name: 'Kurkure Masala Munch', price: '₹30', image: '/kurkure.webp', isVeg: true, isAvailable: true },
     { name: 'Sunfeast Caker Swiss Roll', price: '10', image: '/swiss.webp', isVeg: true, isAvailable: true },
     { name: 'Sunfeast Caker Trinity', price: '10', image: '/trin.webp', isVeg: true, isAvailable: true },
-    { name: 'Waffy(single roll)', price: '05', image: '/waffy.webp', isVeg: true, isAvailable: true },
+    { name: 'Waffy(single roll)', price: '03', image: '/waffy.webp', isVeg: true, isAvailable: true },
     { name: 'Coffee', price: '₹12', image: '/coffee.jpg', isVeg: true, isAvailable: false },
     { name: 'Tea', price: '₹12', image: '/chai.jpg', isVeg: true, isAvailable: false },
   ];
