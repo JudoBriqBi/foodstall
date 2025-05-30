@@ -33,7 +33,7 @@ function YourCart() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 bg-white shadow-md z-10 flex items-center justify-between p-4">
+      <header className="sticky top-0 bg-[#4d869c] shadow-md z-10 flex items-center justify-between p-4">
         <img src={logo} alt="Company Logo" className="w-12 h-12" />
       </header>
       <div className="flex-grow p-4">

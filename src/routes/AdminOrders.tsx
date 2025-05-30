@@ -37,9 +37,9 @@ const AdminOrders = () => {
 
   return (
     <div className="p-4">
-      <div className="flex items-center mb-4">
+      <div className="flex items-center mb-4 bg-[#4d869c] p-4 shadow-md">
         <img src="/companyLogo.png" alt="Company Logo" className="w-12 h-12 mr-2" />
-        <h1 className="text-2xl font-bold">Orders</h1>
+        <h1 className="text-2xl font-bold text-white">Orders</h1>
       </div>
       <table className="w-full border-collapse border border-gray-300">
         <thead>

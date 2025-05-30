@@ -62,7 +62,7 @@ function Menu() {
 
   return (
     <div className="bg-gray-100 h-full">
-      <header className="sticky top-0 bg-white shadow-md z-10 flex items-center justify-between p-4">
+      <header className="sticky top-0 bg-[#4d869c] shadow-md z-10 flex items-center justify-between p-4">
         <img src={logo} alt="Company Logo" className="w-12 h-12" />
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded"
