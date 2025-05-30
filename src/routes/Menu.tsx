@@ -77,7 +77,11 @@ function Menu() {
           <div key={index} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
             <img src={item.image} alt={item.name} className="w-20 h-20 rounded mb-4" />
             <div className="flex items-center mb-2">
-              <span className={`w-4 h-4 rounded-full mr-2 ${item.isVeg ? 'bg-green-500' : 'bg-red-500'}`}></span>
+              <img
+                src={item.isVeg ? '/veg.svg' : '/nonVeg.svg'}
+                alt={item.isVeg ? 'Veg Icon' : 'Non-Veg Icon'}
+                className="w-6 h-6 rounded-full mr-2"
+              />
               <span className="text-lg font-semibold text-black">{item.name}</span>
             </div>
             <span className="text-gray-600 mb-4">{item.price}</span>
