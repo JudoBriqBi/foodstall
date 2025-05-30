@@ -63,12 +63,15 @@ function Menu() {
   };
 
   return (
-    <div className="bg-gray-100 h-full">
-      <header className="sticky top-0 bg-[#4d869c] shadow-md z-10 flex items-center justify-between p-3">
-        <img src={logo} alt="Company Logo" className="w-12 h-12" />
+    <div className="bg-gray-100 min-h-screen">
+      <header className="sticky top-0 bg-gradient-to-r from-[#4d869c] to-[#6eb5c0] shadow-md z-10 flex items-center justify-between px-6 py-3 border-b border-[#3a6172]">
+        <div className="flex items-center gap-4">
+          <img src={logo} alt="Company Logo" className="w-12 h-12" />
+          <span className="text-2xl font-bold text-white tracking-wide drop-shadow">Menu</span>
+        </div>
         <button
           onClick={goToYourCart}
-          className="relative p-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+          className="relative p-2 rounded-md hover:bg-[#3a6172]/70 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white group"
           aria-label="View Cart"
         >
           <svg version="1.1" id="shopping_x5F_carts_1_" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 128 128" xmlSpace="preserve" className="w-8 h-8" fill="white">
@@ -77,44 +80,57 @@ function Menu() {
             </g>
           </svg>
           {addedItems.length > 0 && (
-            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
+            <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 border-2 border-white rounded-full shadow group-hover:scale-110 transition-transform">
               {addedItems.length}
             </span>
           )}
+          <span className="absolute left-1/2 -bottom-6 -translate-x-1/2 text-xs text-gray-700 bg-white px-2 py-0.5 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">View Cart</span>
         </button>
       </header>
-      {/* <h1 className="text-center text-4xl font-bold mb-6">MENU</h1> */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-[2px] p-1">
-        {menuItems.map((item, index) => (
-          <div key={index} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
-            <img src={item.image} alt={item.name} className="w-20 h-20 rounded mb-4" />
-            <div className="flex items-center mb-2">
-              <img
-                src={item.isVeg ? '/veg.svg' : '/nonVeg.svg'}
-                alt={item.isVeg ? 'Veg Icon' : 'Non-Veg Icon'}
-                className="w-6 h-6 rounded-full mr-2"
-              />
-              <span className="text-lg font-semibold text-black">{item.name}</span>
+      <main className="max-w-6xl mx-auto w-full">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+          {menuItems.map((item, index) => (
+            <div
+              key={index}
+              className="bg-white shadow-lg rounded-xl p-4 flex flex-col items-center transition-transform hover:scale-105 hover:shadow-2xl border border-gray-100 relative group"
+            >
+              <img src={item.image} alt={item.name} className="w-24 h-24 rounded-lg mb-3 object-cover border-2 border-gray-200 group-hover:border-[#4d869c] transition" />
+              <div className="flex items-center mb-2">
+                <img
+                  src={item.isVeg ? '/veg.svg' : '/nonVeg.svg'}
+                  alt={item.isVeg ? 'Veg Icon' : 'Non-Veg Icon'}
+                  className="w-6 h-6 rounded-full mr-2"
+                />
+                <span className="text-lg font-semibold text-gray-900">{item.name}</span>
+              </div>
+              <span className="text-[#4d869c] font-bold mb-2 text-lg">{item.price}</span>
+              <div className="flex w-full justify-center items-center gap-2 mt-2">
+                <button
+                  className="bg-gray-200 text-[#4d869c] px-3 py-1 text-2xl rounded-l hover:bg-[#e0f2f7] focus:outline-none focus:ring-2 focus:ring-[#4d869c] min-w-[40px]"
+                  aria-label={`Decrease quantity of ${item.name}`}
+                  onClick={() => decrementQuantity(index)}
+                >
+                  -
+                </button>
+                <span className="text-2xl font-semibold text-gray-900 text-center w-8">
+                  {quantities[index]}
+                </span>
+                <button
+                  className="bg-[#4d869c] text-white px-3 py-1 text-2xl rounded-r hover:bg-[#357086] focus:outline-none focus:ring-2 focus:ring-[#4d869c] min-w-[40px]"
+                  aria-label={`Increase quantity of ${item.name}`}
+                  onClick={() => incrementQuantity(index)}
+                >
+                  +
+                </button>
+              </div>
+              {/* Optional: Add a best seller badge for certain items */}
+              {/* {index === 0 && (
+                <span className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold px-2 py-0.5 rounded-full shadow">Best Seller</span>
+              )} */}
             </div>
-            <span className="text-gray-600 mb-4">{item.price}</span>
-            <div className="flex w-4/5 justify-between">
-              <button
-                className="!bg-blue-500 text-white px-2 py-1 !text-3xl rounded min-w-[40px]"
-                onClick={() => decrementQuantity(index)}
-              >
-                -
-              </button>
-              <span className="text-2xl font-semibold text-black text-center">{quantities[index]}</span>
-              <button
-                className="!bg-blue-500 text-white px-2 py-1 !text-2xl rounded min-w-[40px]"
-                onClick={() => incrementQuantity(index)}
-              >
-                +
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }
