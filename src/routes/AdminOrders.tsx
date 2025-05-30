@@ -16,6 +16,7 @@ type Order = {
   table_no: string | number;
   status: 'pending' | 'done';
   receivedAt: string;
+  order_type: string; // Added orderType field
 };
 
 const AdminOrders = () => {
@@ -68,6 +69,7 @@ const AdminOrders = () => {
             <th className="border border-gray-300 p-2">Table No</th>
             <th className="border border-gray-300 p-2">Order Status</th>
             <th className="border border-gray-300 p-2">Order Received Time</th>
+            <th className="border border-gray-300 p-2">Order Type</th>
           </tr>
         </thead>
         <tbody>
@@ -101,6 +103,7 @@ const AdminOrders = () => {
                 </button>
               </td>
               <td className="border border-gray-300 p-2">{order.receivedAt}</td>
+              <td className="border border-gray-300 p-2">{order.order_type}</td>
             </tr>
           ))}
         </tbody>
