@@ -11,7 +11,7 @@ const Admin = () => {
     try {
       const response = await axios.post('/api/admin/login', { username, password });
       if (response.data.success) {
-        navigate('/admin/orders');
+        navigate('/admin/dashboard');
       } else {
         alert('Invalid username or password');
       }

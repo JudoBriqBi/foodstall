@@ -5,6 +5,7 @@ import YourCart from './routes/YourCart';
 // import Checkout from './routes/Checkout'; // Checkout is now a modal, not a page
 import Admin from './routes/Admin';
 import AdminOrders from './routes/AdminOrders';
+import AdminDashboard from './routes/AdminDashboard';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       {/* <Route path="/checkout" element={<Checkout />} /> */}{/* Removed checkout route */}
       <Route path="/admin" element={<Admin />} />
       <Route path="/admin/orders" element={<AdminOrders />} />
+      <Route path="/admin/dashboard" element={<AdminDashboard />} />
     </Routes>
   );
 }

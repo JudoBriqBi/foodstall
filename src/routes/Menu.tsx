@@ -4,14 +4,13 @@ import logo from '/companyLogo.png'; // Adjust the path as necessary
 
 function Menu() {
   const menuItems = [
-    { name: 'Lays magic masala', price: '₹50', image: '/lays.jpg', isVeg: true },
-    { name: 'Lays cream & onion', price: '₹50', image: '/lays_green.jpg', isVeg: true },
-    { name: 'Bingo Mad Angles', price: '₹50', image: '/mad.jpg', isVeg: true },
-    { name: 'Too Yumm Bhoot Chips', price: '₹50', image: '/bhoot.jpg', isVeg: true },
-    { name: 'Bingo Tedhe Medhe', price: '₹50', image: '/tedhe.jpg', isVeg: true },
-    { name: 'Coffee', price: '₹12', image: '/coffee.jpg', isVeg: true },
-    { name: 'Tea', price: '₹12', image: '/chai.jpg', isVeg: true },
-    
+    { name: 'Lays magic masala', price: '₹50', image: '/lays.jpg', isVeg: true, isAvailable: true },
+    { name: 'Lays cream & onion', price: '₹50', image: '/lays_green.jpg', isVeg: true, isAvailable: true },
+    { name: 'Bingo Mad Angles', price: '₹50', image: '/mad.jpg', isVeg: true, isAvailable: true },
+    { name: 'Too Yumm Bhoot Chips', price: '₹50', image: '/bhoot.jpg', isVeg: true, isAvailable: true },
+    { name: 'Bingo Tedhe Medhe', price: '₹50', image: '/tedhe.jpg', isVeg: true, isAvailable: true },
+    { name: 'Coffee', price: '₹12', image: '/coffee.jpg', isVeg: true, isAvailable: false },
+    { name: 'Tea', price: '₹12', image: '/chai.jpg', isVeg: true, isAvailable: false },
   ];
 
   const [quantities, setQuantities] = useState(Array(menuItems.length).fill(0));
@@ -105,24 +104,33 @@ function Menu() {
               </div>
               <span className="text-[#4d869c] font-bold mb-2 text-lg">{item.price}</span>
               <div className="flex w-full justify-center items-center gap-2 mt-2">
-                <button
-                  className="bg-gray-200 text-[#4d869c] px-3 py-1 text-2xl rounded-l hover:bg-[#e0f2f7] focus:outline-none focus:ring-2 focus:ring-[#4d869c] min-w-[40px]"
-                  aria-label={`Decrease quantity of ${item.name}`}
-                  onClick={() => decrementQuantity(index)}
-                >
-                  -
-                </button>
-                <span className="text-2xl font-semibold text-gray-900 text-center w-8">
-                  {quantities[index]}
-                </span>
-                <button
-                  className="bg-[#4d869c] text-white px-3 py-1 text-2xl rounded-r hover:bg-[#357086] focus:outline-none focus:ring-2 focus:ring-[#4d869c] min-w-[40px]"
-                  aria-label={`Increase quantity of ${item.name}`}
-                  onClick={() => incrementQuantity(index)}
-                >
-                  +
-                </button>
+                {item.isAvailable ? (
+                  <>
+                    <button
+                      className="bg-gray-200 text-[#4d869c] px-3 py-1 text-2xl rounded-l hover:bg-[#e0f2f7] focus:outline-none focus:ring-2 focus:ring-[#4d869c] min-w-[40px]"
+                      aria-label={`Decrease quantity of ${item.name}`}
+                      onClick={() => decrementQuantity(index)}
+                    >
+                      -
+                    </button>
+                    <span className="text-2xl font-semibold text-gray-900 text-center w-8">
+                      {quantities[index]}
+                    </span>
+                    <button
+                      className="bg-[#4d869c] text-white px-3 py-1 text-2xl rounded-r hover:bg-[#357086] focus:outline-none focus:ring-2 focus:ring-[#4d869c] min-w-[40px]"
+                      aria-label={`Increase quantity of ${item.name}`}
+                      onClick={() => incrementQuantity(index)}
+                    >
+                      +
+                    </button>
+                  </>
+                ) : (
+                  <span className="text-red-500 font-medium">Currently Unavailable</span>
+                )}
               </div>
+              {!item.isAvailable && (
+                <span className="absolute top-2 right-2 bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">Out of Stock</span>
+              )}
               {/* Optional: Add a best seller badge for certain items */}
               {/* {index === 0 && (
                 <span className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold px-2 py-0.5 rounded-full shadow">Best Seller</span>
