@@ -14,6 +14,8 @@ type Order = {
   ordered_items: OrderedItem[];
   room_no: string | number;
   table_no: string | number;
+  status: 'pending' | 'done';
+  receivedAt: string;
 };
 
 const AdminOrders = () => {
@@ -23,8 +25,13 @@ const AdminOrders = () => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get('/api/admin/orders');
-        setOrders(response.data);
-        console.log('Fetched orders:', response.data);
+        const fetchedOrders = response.data.map((order: Omit<Order, 'status' | 'receivedAt'>) => ({
+          ...order,
+          status: 'pending' as 'pending' | 'done',
+          receivedAt: new Date().toLocaleString(),
+        }));
+        setOrders(fetchedOrders);
+        console.log('Fetched orders:', fetchedOrders);
       } catch (error) {
         console.error('Error fetching orders:', error);
       }
@@ -32,6 +39,16 @@ const AdminOrders = () => {
 
     fetchOrders();
   }, []);
+
+  const handleUpdateStatus = (orderId: string | number) => {
+    setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.id === orderId
+          ? { ...order, status: order.status === 'pending' ? 'done' : 'pending' }
+          : order
+      )
+    );
+  };
 
   console.log('Orders state:', orders);
 
@@ -49,6 +66,8 @@ const AdminOrders = () => {
             <th className="border border-gray-300 p-2">Items</th>
             <th className="border border-gray-300 p-2">Room No</th>
             <th className="border border-gray-300 p-2">Table No</th>
+            <th className="border border-gray-300 p-2">Order Status</th>
+            <th className="border border-gray-300 p-2">Order Received Time</th>
           </tr>
         </thead>
         <tbody>
@@ -70,6 +89,18 @@ const AdminOrders = () => {
               </td>
               <td className="border border-gray-300 p-2">{order.room_no}</td>
               <td className="border border-gray-300 p-2">{order.table_no}</td>
+              <td className="border border-gray-300 p-2">
+                {order.status}
+                <button
+                  onClick={() => handleUpdateStatus(order.id)}
+                  className={`ml-2 px-2 py-1 rounded text-white ${
+                    order.status === 'pending' ? 'bg-yellow-500' : 'bg-green-500'
+                  }`}
+                >
+                  Mark as {order.status === 'pending' ? 'Done' : 'Pending'}
+                </button>
+              </td>
+              <td className="border border-gray-300 p-2">{order.receivedAt}</td>
             </tr>
           ))}
         </tbody>
