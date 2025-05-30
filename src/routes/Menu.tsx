@@ -4,9 +4,9 @@ import logo from '/companyLogo.png'; // Adjust the path as necessary
 
 function Menu() {
   const menuItems = [
-    { name: 'Lays Magic Masala', price: '₹50', image: '/lays.jpg', isVeg: true },
+    { name: 'Lays magic masala', price: '₹50', image: '/lays.jpg', isVeg: true },
     { name: 'Lays cream & onion', price: '₹50', image: '/lays_green.jpg', isVeg: true },
-    { name: 'Bingo Mad angles', price: '₹50', image: '/mad.jpg', isVeg: true },
+    { name: 'Bingo Mand angles', price: '₹50', image: '/mad.jpg', isVeg: true },
     { name: 'Too Yumm Bhoot Chips', price: '₹50', image: '/bhoot.jpg', isVeg: true },
     { name: 'Bingo Tedhe Medhe', price: '₹50', image: '/tedhe.jpg', isVeg: true },
     { name: 'Coffee', price: '₹12', image: '/coffee.jpg', isVeg: true },
@@ -83,8 +83,8 @@ function Menu() {
           )}
         </button>
       </header>
-      <h1 className="text-center text-4xl font-bold mb-6">MENU</h1>
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-[2px] p-4">
+      {/* <h1 className="text-center text-4xl font-bold mb-6">MENU</h1> */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-[2px] p-1">
         {menuItems.map((item, index) => (
           <div key={index} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
             <img src={item.image} alt={item.name} className="w-20 h-20 rounded mb-4" />
