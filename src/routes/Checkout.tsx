@@ -9,10 +9,6 @@ interface CheckoutModalProps {
   addedItems: { name: string; price: string; image: string; isVeg: boolean; quantity: number }[];
 }
 
-// Simulate a persistent order ID counter (for frontend only - resets on page refresh)
-// In a real application, this MUST be handled by the backend.
-let simulatedOrderIdCounter = parseInt(localStorage.getItem('orderIdCounter') || '1');
-
 function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
   const [formData, setFormData] = useState({
     userName: '',
@@ -24,7 +20,6 @@ function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
   const [orderId, setOrderId] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  // Reset form when modal opens or addedItems change
   useEffect(() => {
     if (isOpen) {
       setFormData({
@@ -34,20 +29,14 @@ function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
         tableNo: '',
         orderType: '',
       });
-      setShowSuccessModal(false); // Reset success modal as well
+      setOrderId('');
+      setShowSuccessModal(false);
     }
   }, [isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const generateSequentialOrderId = () => {
-    const currentId = simulatedOrderIdCounter;
-    simulatedOrderIdCounter++;
-    localStorage.setItem('orderIdCounter', simulatedOrderIdCounter.toString());
-    return `ORDER-${currentId.toString().padStart(5, '0')}`; // Example: ORDER-00001
   };
 
   const handleConfirmOrder = async () => {
@@ -61,22 +50,27 @@ function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
       return;
     }
 
-    const newOrderId = generateSequentialOrderId(); // Use new sequential ID generator
-    setOrderId(newOrderId);
-
     const orderData = {
       userName,
       phoneNo,
       roomNo,
       tableNo,
       orderType,
-      orderId: newOrderId, // Use the new ID here
       orderedItems: addedItems,
     };
 
     try {
       const response = await axios.post('/api/users/orders', orderData);
       console.log('Order saved successfully:', response.data);
+      
+      if (response.data && response.data.id) {
+        setOrderId(response.data.id.toString());
+      } else if (response.data && response.data.order_id) {
+        setOrderId(response.data.order_id.toString());
+      } else {
+        console.warn('Backend did not return a recognizable order ID. Displaying a generic message or timestamp ID.');
+        setOrderId(`TEMP-${Date.now()}`);
+      }
       setShowSuccessModal(true);
     } catch (error) {
       console.error('Error saving order:', error);
@@ -86,7 +80,7 @@ function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
 
   const closeSuccessModalAndCheckout = () => {
     setShowSuccessModal(false);
-    onClose(); // Close the main checkout modal
+    onClose();
   };
 
   const handleDownloadReceipt = () => {
