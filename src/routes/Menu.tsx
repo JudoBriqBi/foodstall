@@ -88,7 +88,7 @@ function Menu() {
         </button>
       </header>
       <main className="max-w-6xl mx-auto w-full">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 p-1">
           {menuItems.map((item, index) => (
             <div
               key={index}
