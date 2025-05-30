@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 import logo from '/companyLogo.png'; // Adjust the path as necessary
 
 function Checkout() {
@@ -24,11 +25,34 @@ function Checkout() {
     return 'id-' + Math.random().toString(36).substr(2, 9);
   };
 
-  const handleConfirmOrder = () => {
+  const handleConfirmOrder = async () => {
+    // Validate required fields
+    const { userName, phoneNo, roomNo, tableNo } = formData;
+    if (!userName || !phoneNo || !roomNo || !tableNo) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
     const uniqueId = generateUniqueId();
     setOrderId(uniqueId);
-    setShowModal(true);
-    console.log('Added Items:', addedItems); // Debugging to ensure addedItems is populated
+
+    const orderData = {
+      userName,
+      phoneNo,
+      roomNo,
+      tableNo,
+      orderId: uniqueId,
+      orderedItems: addedItems,
+    };
+
+    try {
+      const response = await axios.post('/api/users/orders', orderData);
+      console.log('Order saved successfully:', response.data);
+      setShowModal(true);
+    } catch (error) {
+      console.error('Error saving order:', error);
+      alert('Failed to save order. Please try again.');
+    }
   };
 
   const closeModal = () => {
@@ -55,6 +79,7 @@ function Checkout() {
               value={formData.userName}
               onChange={handleChange}
               className="w-full border rounded p-2"
+              required
             />
           </div>
           <div>
@@ -65,6 +90,7 @@ function Checkout() {
               value={formData.phoneNo}
               onChange={handleChange}
               className="w-full border rounded p-2"
+              required
             />
           </div>
           <div>
@@ -75,6 +101,7 @@ function Checkout() {
               value={formData.roomNo}
               onChange={handleChange}
               className="w-full border rounded p-2"
+              required
             />
           </div>
           <div>
@@ -85,6 +112,7 @@ function Checkout() {
               value={formData.tableNo}
               onChange={handleChange}
               className="w-full border rounded p-2"
+              required
             />
           </div>
           <button
