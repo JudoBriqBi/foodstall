@@ -9,6 +9,7 @@ function Checkout() {
     phoneNo: '',
     roomNo: '',
     tableNo: '',
+    orderType: '', // Added orderType to formData
   });
   const [orderId, setOrderId] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -16,7 +17,7 @@ function Checkout() {
   const addedItems: { name: string; price: string; image: string; isVeg: boolean; quantity: number }[] = location.state?.addedItems || [];
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -27,8 +28,8 @@ function Checkout() {
 
   const handleConfirmOrder = async () => {
     // Validate required fields
-    const { userName, phoneNo, roomNo, tableNo } = formData;
-    if (!userName || !phoneNo || !roomNo || !tableNo) {
+    const { userName, phoneNo, roomNo, tableNo, orderType } = formData;
+    if (!userName || !phoneNo || !roomNo || !tableNo || !orderType) {
       alert('Please fill in all required fields.');
       return;
     }
@@ -41,6 +42,7 @@ function Checkout() {
       phoneNo,
       roomNo,
       tableNo,
+      orderType: formData.orderType, // Added orderType
       orderId: uniqueId,
       orderedItems: addedItems,
     };
@@ -115,6 +117,20 @@ function Checkout() {
               required
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium">Order Type</label>
+            <select
+              name="orderType"
+              value={formData.orderType}
+              onChange={handleChange}
+              className="w-full border rounded p-2"
+              required
+            >
+              <option value="">Select Order Type</option>
+              <option value="delivery">Delivery</option>
+              <option value="takeaway">Take Away</option>
+            </select>
+          </div>
           <button
             type="button"
             onClick={handleConfirmOrder}
@@ -136,6 +152,7 @@ function Checkout() {
               <p className="mb-2">Phone No: {formData.phoneNo}</p>
               <p className="mb-2">Room No: {formData.roomNo}</p>
               <p className="mb-2">Table No: {formData.tableNo}</p>
+              <p className="mb-2">Order Type: {formData.orderType}</p>
               <div className="mt-4">
                 <h2 className="text-lg font-bold">Ordered Items:</h2>
                 <ul className="list-disc pl-5">
