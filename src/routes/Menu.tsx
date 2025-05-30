@@ -67,7 +67,7 @@ function Menu() {
       <header className="sticky top-0 bg-gradient-to-r from-[#4d869c] to-[#6eb5c0] shadow-md z-10 flex items-center justify-between px-6 py-3 border-b border-[#3a6172]">
         <div className="flex items-center gap-4">
           <img src={logo} alt="Company Logo" className="w-12 h-12" />
-          <span className="text-2xl font-bold text-white tracking-wide drop-shadow">Menu</span>
+          <span className="text-2xl font-bold text-white tracking-wide drop-shadow">Snacks</span>
         </div>
         <button
           onClick={goToYourCart}

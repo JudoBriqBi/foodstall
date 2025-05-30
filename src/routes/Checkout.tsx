@@ -1,21 +1,38 @@
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import logo from '/companyLogo.png'; // Adjust the path as necessary
+// Logo import might be optional if the modal doesn't have its own header, or can be passed as prop
+// import logo from '/companyLogo.png';
 
-function Checkout() {
+interface CheckoutModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  addedItems: { name: string; price: string; image: string; isVeg: boolean; quantity: number }[];
+}
+
+function CheckoutModal({ isOpen, onClose, addedItems }: CheckoutModalProps) {
   const [formData, setFormData] = useState({
     userName: '',
     phoneNo: '',
     roomNo: '',
     tableNo: '',
-    orderType: '', // Added orderType to formData
+    orderType: '',
   });
   const [orderId, setOrderId] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const location = useLocation();
-  const addedItems: { name: string; price: string; image: string; isVeg: boolean; quantity: number }[] = location.state?.addedItems || [];
-  const navigate = useNavigate();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  // Reset form when modal opens or addedItems change
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({
+        userName: '',
+        phoneNo: '',
+        roomNo: '',
+        tableNo: '',
+        orderType: '',
+      });
+      setShowSuccessModal(false); // Reset success modal as well
+    }
+  }, [isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -27,10 +44,13 @@ function Checkout() {
   };
 
   const handleConfirmOrder = async () => {
-    // Validate required fields
     const { userName, phoneNo, roomNo, tableNo, orderType } = formData;
     if (!userName || !phoneNo || !roomNo || !tableNo || !orderType) {
       alert('Please fill in all required fields.');
+      return;
+    }
+    if (addedItems.length === 0) {
+      alert('Your cart is empty. Please add items before checking out.');
       return;
     }
 
@@ -42,7 +62,7 @@ function Checkout() {
       phoneNo,
       roomNo,
       tableNo,
-      orderType: formData.orderType, // Added orderType
+      orderType,
       orderId: uniqueId,
       orderedItems: addedItems,
     };
@@ -50,80 +70,91 @@ function Checkout() {
     try {
       const response = await axios.post('/api/users/orders', orderData);
       console.log('Order saved successfully:', response.data);
-      setShowModal(true);
+      setShowSuccessModal(true);
     } catch (error) {
       console.error('Error saving order:', error);
       alert('Failed to save order. Please try again.');
     }
   };
 
-  const closeModal = () => {
-    setShowModal(false);
+  const closeSuccessModalAndCheckout = () => {
+    setShowSuccessModal(false);
+    onClose(); // Close the main checkout modal
   };
-
-  const handleBack = () => {
-    navigate(-1);
-  };
+  
+  if (!isOpen) {
+    return null;
+  }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 bg-[#4d869c] shadow-md z-10 flex items-center justify-between p-4">
-        <img src={logo} alt="Company Logo" className="w-12 h-12" />
-      </header>
-      <div className="flex-grow p-4">
-        <h1 className="text-center text-2xl font-bold mb-6">Checkout</h1>
-        <form className="space-y-4">
+    <div className="fixed inset-0 bg-[#00000091] flex items-center justify-center z-50 p-4">
+      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col">
+        {/* Modal Header */}
+        <div className="flex justify-between items-center mb-4 border-b pb-3">
+          <h2 className="text-2xl font-semibold text-gray-800">Checkout</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-800 text-2xl"
+            aria-label="Close checkout"
+          >
+            &times;
+          </button>
+        </div>
+
+        {/* Modal Body - Scrollable */}
+        <div className="flex-grow overflow-y-auto pr-2 space-y-4">
+          {/* Form fields */}
           <div>
-            <label className="block text-sm font-medium">User Name</label>
+            <label className="block text-sm font-medium text-gray-700">User Name</label>
             <input
               type="text"
               name="userName"
               value={formData.userName}
               onChange={handleChange}
-              className="w-full border rounded p-2"
+              className="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-[#4d869c] focus:border-[#4d869c]"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">Phone No</label>
+            <label className="block text-sm font-medium text-gray-700">Phone No</label>
             <input
               type="text"
               name="phoneNo"
               value={formData.phoneNo}
               onChange={handleChange}
-              className="w-full border rounded p-2"
+              className="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-[#4d869c] focus:border-[#4d869c]"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">Room No</label>
+            <label className="block text-sm font-medium text-gray-700">Room No</label>
             <input
               type="text"
               name="roomNo"
               value={formData.roomNo}
               onChange={handleChange}
-              className="w-full border rounded p-2"
+              className="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-[#4d869c] focus:border-[#4d869c]"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">Table No</label>
+            <label className="block text-sm font-medium text-gray-700">Table No</label>
             <input
               type="text"
               name="tableNo"
               value={formData.tableNo}
               onChange={handleChange}
-              className="w-full border rounded p-2"
+              className="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-[#4d869c] focus:border-[#4d869c]"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">Order Type</label>
+            <label className="block text-sm font-medium text-gray-700">Order Type</label>
             <select
               name="orderType"
               value={formData.orderType}
               onChange={handleChange}
-              className="w-full border rounded p-2"
+              className="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-[#4d869c] focus:border-[#4d869c]"
               required
             >
               <option value="">Select Order Type</option>
@@ -131,31 +162,43 @@ function Checkout() {
               <option value="takeaway">Take Away</option>
             </select>
           </div>
+        </div>
+
+        {/* Modal Footer */}
+        <div className="mt-6 pt-4 border-t flex flex-col sm:flex-row justify-end gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full sm:w-auto bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition duration-150 ease-in-out"
+          >
+            Cancel
+          </button>
           <button
             type="button"
             onClick={handleConfirmOrder}
-            className="w-full bg-green-500 text-white py-2 rounded"
+            className="w-full sm:w-auto bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-150 ease-in-out disabled:opacity-50"
+            disabled={addedItems.length === 0}
           >
-            Confirm Order
+            Confirm Order (₹{addedItems.reduce((sum, item) => sum + item.quantity * parseInt(item.price.replace('₹', '')), 0)})
           </button>
-        </form>
+        </div>
 
-        {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded shadow-lg w-96">
-              <h2 className="text-xl font-bold mb-4">Order Confirmed</h2>
+        {/* Inner Success Modal */}
+        {showSuccessModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4">
+            <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md text-center">
+              <h2 className="text-xl font-bold mb-4 text-green-600">Order Confirmed!</h2>
               <p className="mb-2">
-                Order ID:{' '}
-                <span className="font-mono text-blue-500">{orderId}</span>
+                Order ID: <span className="font-mono text-[#4d869c]">{orderId}</span>
               </p>
-              <p className="mb-2">User Name: {formData.userName}</p>
-              <p className="mb-2">Phone No: {formData.phoneNo}</p>
-              <p className="mb-2">Room No: {formData.roomNo}</p>
-              <p className="mb-2">Table No: {formData.tableNo}</p>
-              <p className="mb-2">Order Type: {formData.orderType}</p>
-              <div className="mt-4">
-                <h2 className="text-lg font-bold">Ordered Items:</h2>
-                <ul className="list-disc pl-5">
+              <p className="mb-1">User Name: {formData.userName}</p>
+              <p className="mb-1">Phone No: {formData.phoneNo}</p>
+              <p className="mb-1">Room No: {formData.roomNo}</p>
+              <p className="mb-1">Table No: {formData.tableNo}</p>
+              <p className="mb-3">Order Type: {formData.orderType}</p>
+              <div className="mt-4 pt-2 border-t">
+                <h3 className="text-lg font-semibold mb-2">Ordered Items:</h3>
+                <ul className="list-disc list-inside text-left max-h-32 overflow-y-auto text-sm text-gray-600">
                   {addedItems.map((item, index) => (
                     <li key={index}>
                       {item.name} - {item.quantity} x {item.price}
@@ -164,8 +207,8 @@ function Checkout() {
                 </ul>
               </div>
               <button
-                onClick={closeModal}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={closeSuccessModalAndCheckout}
+                className="mt-6 bg-[#4d869c] text-white px-6 py-2 rounded-md hover:bg-[#357086] transition duration-150 ease-in-out w-full"
               >
                 Close
               </button>
@@ -173,16 +216,8 @@ function Checkout() {
           </div>
         )}
       </div>
-      <footer className="sticky bottom-0 bg-white shadow-md z-10 flex items-center justify-between p-4">
-        <button
-          className="bg-gray-500 text-white px-4 py-2 rounded"
-          onClick={handleBack}
-        >
-          Back
-        </button>
-      </footer>
     </div>
   );
 }
 
-export default Checkout;
+export default CheckoutModal;
